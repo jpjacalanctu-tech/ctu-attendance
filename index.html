@@ -117,22 +117,38 @@ CEBU TECHNOLOGICAL UNIVERSITY – DUMANJUG CAMPUS
 <input id="name" placeholder="Enter Name" style="padding:8px;width:200px;margin-bottom:20px">
 
 <div class="section">
-Morning<br>
-<button onclick="log('Morning','IN')">IN</button>
-<button onclick="log('Morning','OUT')">OUT</button>
-</div>
+    <div class="section">
+        Morning<br>
+        
+        <button onclick="log('Morning','IN')">IN</button>
+        <span id="MorningIN" style="margin-right:10px;"></span>
+        
+        <button onclick="log('Morning','OUT')">OUT</button>
+        <span id="MorningOUT"></span>
+        
+        </div>
 
 <div class="section">
-Afternoon<br>
-<button onclick="log('Afternoon','IN')">IN</button>
-<button onclick="log('Afternoon','OUT')">OUT</button>
-</div>
+    Afternoon<br>
+
+    <button onclick="log('Afternoon','IN')">IN</button>
+    <span id="AfternoonIN" style="margin-right:10px;"></span>
+    
+    <button onclick="log('Afternoon','OUT')">OUT</button>
+    <span id="AfternoonOUT"></span>
+    
+    </div>
 
 <div class="section">
-Over Time<br>
-<button onclick="log('Overtime','IN')">IN</button>
-<button onclick="log('Overtime','OUT')">OUT</button>
-</div>
+    Overtime<br>
+
+    <button onclick="log('Overtime','IN')">IN</button>
+    <span id="OvertimeIN" style="margin-right:10px;"></span>
+    
+    <button onclick="log('Overtime','OUT')">OUT</button>
+    <span id="OvertimeOUT"></span>
+    
+    </div>
 
 </div>
 
@@ -141,6 +157,31 @@ Over Time<br>
 <script>
 
 function updateClock(){
+
+    window.onload=function(){
+
+var today=new Date().toDateString();
+var savedDate=localStorage.getItem("logDate");
+
+if(savedDate==today){
+
+["MorningIN","MorningOUT",
+"AfternoonIN","AfternoonOUT",
+"OvertimeIN","OvertimeOUT"]
+
+.forEach(function(id){
+
+var t=localStorage.getItem(id);
+
+if(t){
+document.getElementById(id).innerHTML=t;
+}
+
+});
+
+}
+
+}
 
 var now = new Date();
 
@@ -159,7 +200,64 @@ day:'numeric'
 
 setInterval(updateClock,1000);
 
-function log(session,action){
+function log(session, action){
+
+var name=document.getElementById("name").value;
+
+if(name==""){
+alert("Please enter your name first.");
+return;
+}
+
+var key=session+action;
+var today=new Date().toDateString();
+var savedDate=localStorage.getItem("logDate");
+
+/* DAILY RESET */
+
+if(savedDate!=today){
+localStorage.clear();
+localStorage.setItem("logDate",today);
+}
+
+/* PREVENT DOUBLE LOGGING */
+
+if(localStorage.getItem(key)){
+alert("You have already logged "+action+" for "+session+".");
+return;
+}
+
+/* GET CURRENT TIME */
+
+var now=new Date();
+var time=now.toLocaleTimeString();
+
+/* DISPLAY TIME IN INTERFACE */
+
+document.getElementById(session+action).innerHTML=time;
+
+/* SAVE IN LOCAL STORAGE */
+
+localStorage.setItem(key,time);
+
+/* SEND DATA TO GOOGLE SHEETS */
+
+fetch("PASTE_YOUR_GOOGLE_SCRIPT_URL",{
+
+method:"POST",
+
+body:JSON.stringify({
+name:name,
+session:session,
+action:action,
+time:time
+})
+
+});
+
+alert("Successfully logged "+action+" for "+session+".");
+
+}
 
 var name=document.getElementById("name").value;
 
@@ -182,5 +280,4 @@ alert("Attendance Recorded");
 </script>
 
 </body>
-
 </html>
