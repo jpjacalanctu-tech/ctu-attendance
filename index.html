@@ -158,31 +158,6 @@ CEBU TECHNOLOGICAL UNIVERSITY – DUMANJUG CAMPUS
 
 function updateClock(){
 
-    window.onload=function(){
-
-var today=new Date().toDateString();
-var savedDate=localStorage.getItem("logDate");
-
-if(savedDate==today){
-
-["MorningIN","MorningOUT",
-"AfternoonIN","AfternoonOUT",
-"OvertimeIN","OvertimeOUT"]
-
-.forEach(function(id){
-
-var t=localStorage.getItem(id);
-
-if(t){
-document.getElementById(id).innerHTML=t;
-}
-
-});
-
-}
-
-}
-
 var now = new Date();
 
 document.getElementById("clock").innerHTML =
@@ -197,6 +172,20 @@ day:'numeric'
 });
 
 }
+
+setInterval(updateClock,1000);
+
+document.getElementById("clock").innerHTML =
+now.toLocaleTimeString();
+
+document.getElementById("date").innerHTML =
+now.toLocaleDateString('en-US',{
+weekday:'long',
+year:'numeric',
+month:'long',
+day:'numeric'
+});
+
 
 setInterval(updateClock,1000);
 
@@ -275,7 +264,6 @@ action:action
 
 alert("Attendance Recorded");
 
-}
 
 </script>
 
