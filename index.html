@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<style>
+
+body{
+margin:0;
+font-family:Segoe UI;
+background:linear-gradient(90deg,#3b6fd8,#1c4fb8);
+height:100vh;
+display:flex;
+align-items:center;
+justify-content:center;
+}
+
+.container{
+display:flex;
+width:1000px;
+height:450px;
+background:white;
+border-radius:10px;
+overflow:hidden;
+box-shadow:0 10px 25px rgba(0,0,0,0.2);
+}
+
+.left-panel{
+background:#0d3a86;
+color:white;
+width:45%;
+display:flex;
+flex-direction:column;
+align-items:center;
+justify-content:center;
+border-top-right-radius:200px;
+border-bottom-right-radius:200px;
+}
+
+.logo{
+width:90px;
+margin-bottom:10px;
+}
+
+.school{
+font-size:14px;
+text-align:center;
+margin-bottom:30px;
+}
+
+.clock{
+font-size:50px;
+font-weight:bold;
+}
+
+.date{
+font-size:18px;
+margin-top:10px;
+}
+
+.right-panel{
+width:55%;
+padding:40px;
+text-align:center;
+}
+
+.right-panel h2{
+font-weight:500;
+margin-bottom:30px;
+}
+
+.section{
+margin-bottom:25px;
+}
+
+button{
+width:120px;
+padding:12px;
+margin:5px;
+border:none;
+border-radius:6px;
+background:#e0e0e0;
+font-size:16px;
+cursor:pointer;
+}
+
+button:hover{
+background:#cfcfcf;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="left-panel">
+
+<img src="https://upload.wikimedia.org/wikipedia/en/2/2e/Cebu_Technological_University.png" class="logo">
+
+<div class="school">
+CEBU TECHNOLOGICAL UNIVERSITY – DUMANJUG CAMPUS
+</div>
+
+<div class="clock" id="clock">00:00:00</div>
+
+<div class="date" id="date"></div>
+
+</div>
+
+
+<div class="right-panel">
+
+<h2>Please Scan Your Finger</h2>
+
+<input id="name" placeholder="Enter Name" style="padding:8px;width:200px;margin-bottom:20px">
+
+<div class="section">
+Morning<br>
+<button onclick="log('Morning','IN')">IN</button>
+<button onclick="log('Morning','OUT')">OUT</button>
+</div>
+
+<div class="section">
+Afternoon<br>
+<button onclick="log('Afternoon','IN')">IN</button>
+<button onclick="log('Afternoon','OUT')">OUT</button>
+</div>
+
+<div class="section">
+Over Time<br>
+<button onclick="log('Overtime','IN')">IN</button>
+<button onclick="log('Overtime','OUT')">OUT</button>
+</div>
+
+</div>
+
+</div>
+
+<script>
+
+function updateClock(){
+
+var now = new Date();
+
+document.getElementById("clock").innerHTML =
+now.toLocaleTimeString();
+
+document.getElementById("date").innerHTML =
+now.toLocaleDateString('en-US',{
+weekday:'long',
+year:'numeric',
+month:'long',
+day:'numeric'
+});
+
+}
+
+setInterval(updateClock,1000);
+
+function log(session,action){
+
+var name=document.getElementById("name").value;
+
+fetch("https://script.google.com/macros/s/AKfycbwmoz7vhyOEyKErBWAbbb7RKTJhNKisosSgDF-MhVgjduREAswkqnvPcUCdjTATpx2kxg/exec",{
+
+method:"POST",
+
+body:JSON.stringify({
+name:name,
+session:session,
+action:action
+})
+
+});
+
+alert("Attendance Recorded");
+
+}
+
+</script>
+
+</body>
+</html>
