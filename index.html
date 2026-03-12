@@ -165,6 +165,10 @@ function updateClock(){
 
 var now = new Date();
 
+function updateClock(){
+
+var now = new Date();
+
 document.getElementById("clock").innerHTML =
 now.toLocaleTimeString();
 
@@ -177,6 +181,9 @@ day:'numeric'
 });
 
 }
+
+setInterval(updateClock,1000);
+updateClock();
 
 setInterval(updateClock,1000);
 
@@ -196,10 +203,10 @@ setInterval(updateClock,1000);
 
 function log(session, action){
 
-var name=document.getElementById("name").value;
+var facultyID=document.getElementById("facultyID").value;
 
-if(name==""){
-alert("Please enter your name first.");
+if(facultyID==""){
+alert("Please enter your Faculty ID.");
 return;
 }
 
@@ -217,31 +224,31 @@ localStorage.setItem("logDate",today);
 /* PREVENT DOUBLE LOGGING */
 
 if(localStorage.getItem(key)){
-alert("You have already logged "+action+" for "+session+".");
+alert("You already logged "+action+" for "+session);
 return;
 }
 
-/* GET CURRENT TIME */
+/* CURRENT TIME */
 
 var now=new Date();
 var time=now.toLocaleTimeString();
 
-/* DISPLAY TIME IN INTERFACE */
+/* SHOW ON SCREEN */
 
 document.getElementById(session+action).innerHTML=time;
 
-/* SAVE IN LOCAL STORAGE */
+/* SAVE LOCALLY */
 
 localStorage.setItem(key,time);
 
-/* SEND DATA TO GOOGLE SHEETS */
+/* SEND TO GOOGLE SHEETS */
 
 fetch("https://script.google.com/macros/s/AKfycbwmoz7vhyOEyKErBWAbbb7RKTJhNKisosSgDF-MhVgjduREAswkqnvPcUCdjTATpx2kxg/exec",{
 
 method:"POST",
 
 body:JSON.stringify({
-name:name,
+facultyID:facultyID,
 session:session,
 action:action,
 time:time
@@ -249,42 +256,6 @@ time:time
 
 });
 
-alert("Successfully logged "+action+" for "+session+".");
+alert("Successfully logged "+action+" for "+session);
 
 }
-
-var name=document.getElementById("name").value;
-
-fetch("https://script.google.com/macros/s/AKfycbwmoz7vhyOEyKErBWAbbb7RKTJhNKisosSgDF-MhVgjduREAswkqnvPcUCdjTATpx2kxg/exec",{
-
-method:"POST",
-
-body:JSON.stringify({
-name:name,
-session:session,
-action:action
-})
-
-});
-
-alert("Attendance Recorded");
-
-function showFacultyName(){
-
-var id=document.getElementById("facultyID").value;
-
-fetch("https://script.google.com/u/0/home/projects/1pmj_9Vi1REy7_KwiZhtRHn3QixGSf3QEQt-2KdrYDo0/edit"+id)
-
-.then(response => response.text())
-
-.then(data => {
-
-document.getElementById("facultyName").innerHTML = data;
-
-});
-
-}
-</script>
-
-</body>
-</html>
