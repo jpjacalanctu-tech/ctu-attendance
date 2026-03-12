@@ -161,101 +161,100 @@ onkeyup="showFacultyName()">
 
 <script>
 
-function updateClock(){
+    /* CLOCK SYSTEM */
+    
+    function updateClock() {
+    
+    const now = new Date();
+    
+    const time = now.toLocaleTimeString('en-US', {
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit'
+    });
+    
+    const date = now.toLocaleDateString('en-US', {
+    weekday:'long',
+    year:'numeric',
+    month:'long',
+    day:'numeric'
+    });
+    
+    document.getElementById("clock").textContent = time;
+    document.getElementById("date").textContent = date;
+    
+    }
+    
+    /* Start clock when page loads */
+    
+    window.onload = function(){
+    updateClock();
+    setInterval(updateClock,1000);
+    };
+    
+    
+    /* LOGGING FUNCTION */
+    
+    function log(session, action){
+    
+    var facultyID=document.getElementById("facultyID").value;
+    
+    if(facultyID==""){
+    alert("Please enter your Faculty ID.");
+    return;
+    }
+    
+    var key=session+action;
+    var today=new Date().toDateString();
+    var savedDate=localStorage.getItem("logDate");
+    
+    /* DAILY RESET */
+    
+    if(savedDate!=today){
+    localStorage.clear();
+    localStorage.setItem("logDate",today);
+    }
+    
+    /* PREVENT DOUBLE LOGGING */
+    
+    if(localStorage.getItem(key)){
+    alert("You already logged "+action+" for "+session);
+    return;
+    }
+    
+    /* CURRENT TIME */
+    
+    var now=new Date();
+    var time=now.toLocaleTimeString();
+    
+    /* SHOW ON SCREEN */
+    
+    document.getElementById(session+action).innerHTML=time;
+    
+    /* SAVE LOCAL */
+    
+    localStorage.setItem(key,time);
+    
+    /* SEND TO GOOGLE SHEETS */
+    
+    fetch("https://script.google.com/macros/s/AKfycbx2Sjb4_N2B88hO55KWkuyGF55wgux3XCYgQRnAtUrWQ-_f9ChrCOrUbeeE19eB5ZqfMg/exec",{
+    
+    method:"POST",
+    
+    body:JSON.stringify({
+    facultyID:facultyID,
+    session:session,
+    action:action,
+    time:time
+    })
+    
+    });
+    
+    alert("Successfully logged "+action+" for "+session);
+    
+    }
+    
+    </script>
 
-var now = new Date();
-
-function updateClock(){
-
-var now = new Date();
-
-document.getElementById("clock").innerHTML =
-now.toLocaleTimeString();
-
-document.getElementById("date").innerHTML =
-now.toLocaleDateString('en-US',{
-weekday:'long',
-year:'numeric',
-month:'long',
-day:'numeric'
-});
-
-}
-
-setInterval(updateClock,1000);
-updateClock();
-
-setInterval(updateClock,1000);
-
-document.getElementById("clock").innerHTML =
-now.toLocaleTimeString();
-
-document.getElementById("date").innerHTML =
-now.toLocaleDateString('en-US',{
-weekday:'long',
-year:'numeric',
-month:'long',
-day:'numeric'
-});
-
-
-setInterval(updateClock,1000);
-
-function log(session, action){
-
-var facultyID=document.getElementById("facultyID").value;
-
-if(facultyID==""){
-alert("Please enter your Faculty ID.");
-return;
-}
-
-var key=session+action;
-var today=new Date().toDateString();
-var savedDate=localStorage.getItem("logDate");
-
-/* DAILY RESET */
-
-if(savedDate!=today){
-localStorage.clear();
-localStorage.setItem("logDate",today);
-}
-
-/* PREVENT DOUBLE LOGGING */
-
-if(localStorage.getItem(key)){
-alert("You already logged "+action+" for "+session);
-return;
-}
-
-/* CURRENT TIME */
-
-var now=new Date();
-var time=now.toLocaleTimeString();
-
-/* SHOW ON SCREEN */
-
-document.getElementById(session+action).innerHTML=time;
-
-/* SAVE LOCALLY */
-
-localStorage.setItem(key,time);
-
-/* SEND TO GOOGLE SHEETS */
-
-fetch("https://script.google.com/macros/s/AKfycbx2Sjb4_N2B88hO55KWkuyGF55wgux3XCYgQRnAtUrWQ-_f9ChrCOrUbeeE19eB5ZqfMg/exec",{
-
-method:"POST",
-
-body:JSON.stringify({
-facultyID:facultyID,
-session:session,
-action:action,
-time:time
-})
-
-});
-
-alert("Successfully logged "+action+" for "+session);
-
-}
+</body>
+</html>
