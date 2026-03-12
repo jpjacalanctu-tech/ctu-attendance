@@ -269,7 +269,21 @@ action:action
 
 alert("Attendance Recorded");
 
+function showFacultyName(){
 
+var id=document.getElementById("facultyID").value;
+
+fetch("https://script.google.com/u/0/home/projects/1ol-TPnKi7WxBrMsppwZqsnyjSa28oGRRkEHgp7YgKbFP0tUqZVECk-vg/edit"+id)
+
+.then(response => response.text())
+
+.then(data => {
+
+document.getElementById("facultyName").innerHTML = data;
+
+});
+
+}
 </script>
 
 </body>
