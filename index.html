@@ -114,8 +114,29 @@ CEBU TECHNOLOGICAL UNIVERSITY – DUMANJUG CAMPUS
 
 <h2>Please Scan Your Finger</h2>
 
-<input id="name" placeholder="Enter Name" style="padding:8px;width:200px;margin-bottom:20px">
+<input id="facultyID" placeholder="Enter Faculty ID Number" 
+style="padding:8px;width:220px;margin-bottom:10px;font-size:16px;"
+onkeyup="showFacultyName()">
 
+<div id="facultyName" style="font-size:16px;color:green;margin-bottom:20px;">
+</div>
+
+function showFacultyName(){
+
+    var id=document.getElementById("facultyID").value;
+    
+    fetch("YOUR_GOOGLE_SCRIPT_URL?facultyID="+id)
+    
+    .then(response => response.text())
+    
+    .then(data => {
+    
+    document.getElementById("facultyName").innerHTML = data;
+    
+    });
+    
+    }
+    
 <div class="section">
     <div class="section">
         Morning<br>
