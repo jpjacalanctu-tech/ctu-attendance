@@ -121,22 +121,6 @@ onkeyup="showFacultyName()">
 <div id="facultyName" style="font-size:16px;color:green;margin-bottom:20px;">
 </div>
 
-function showFacultyName(){
-
-    var id=document.getElementById("facultyID").value;
-    
-    fetch("YOUR_GOOGLE_SCRIPT_URL?facultyID="+id)
-    
-    .then(response => response.text())
-    
-    .then(data => {
-    
-    document.getElementById("facultyName").innerHTML = data;
-    
-    });
-    
-    }
-    
 <div class="section">
     <div class="section">
         Morning<br>
